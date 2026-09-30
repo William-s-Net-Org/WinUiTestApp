@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HockeyRoster.Domain/HockeyRoster.Domain.csproj" />
+    <Project Path="src/HockeyRoster.Application/HockeyRoster.Application.csproj" />
+    <Project Path="src/HockeyRoster.Infrastructure/HockeyRoster.Infrastructure.csproj" />
+    <Project Path="src/HockeyRoster.Presentation/HockeyRoster.Presentation.csproj" />
+    <Project Path="src/HockeyRoster.WinUI/HockeyRoster.WinUI.csproj" />
+  </Folder>
+  <Folder Name="/tests/"><Project Path="tests/HockeyRoster.Tests/HockeyRoster.Tests.csproj" /></Folder>
+</Solution>

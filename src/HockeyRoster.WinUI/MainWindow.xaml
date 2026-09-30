@@ -1,0 +1,59 @@
+<Window x:Class="HockeyRoster.WinUI.MainWindow"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:local="using:HockeyRoster.WinUI"
+ Title="Hockeytruppen">
+ <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+  <Grid x:Name="Root" Padding="32" RowSpacing="24" MinWidth="720" Loaded="OnLoaded" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+   <Grid.Resources><local:ErrorSeverityConverter x:Key="ErrorSeverity"/></Grid.Resources>
+   <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+   <StackPanel Spacing="6">
+    <TextBlock Text="HOCKEY / SPELARREGISTER" FontSize="12" CharacterSpacing="150" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}" />
+    <TextBlock Text="Din trupp börjar här." Style="{ThemeResource TitleTextBlockStyle}" />
+    <TextBlock Text="Samla spelarnas uppgifter på ett ställe. Alla ändringar sparas lokalt." TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+   </StackPanel>
+   <InfoBar Grid.Row="1" IsOpen="{Binding HasMessage, Mode=TwoWay}" Message="{Binding Message}" Severity="{Binding IsError, Converter={StaticResource ErrorSeverity}}" IsClosable="True" />
+   <Grid Grid.Row="2" ColumnSpacing="28">
+    <Grid.ColumnDefinitions><ColumnDefinition Width="300"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+    <Border Padding="24" CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+     <UserControl IsEnabled="{Binding IsReady}"><StackPanel Spacing="14">
+      <TextBlock Text="Lägg till spelare" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+      <TextBlock Text="Alla fält är obligatoriska." Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+      <TextBox Header="Namn" PlaceholderText="För- och efternamn" MaxLength="100" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+      <ComboBox Header="Position" PlaceholderText="Välj position" HorizontalAlignment="Stretch" ItemsSource="{Binding Positions}" DisplayMemberPath="Label" SelectedItem="{Binding SelectedPosition, Mode=TwoWay}"/>
+      <TextBox Header="Tröjnummer (1–99)" Text="{Binding Number, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+      <Grid ColumnSpacing="12"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions>
+       <TextBox Header="Vikt (kg)" PlaceholderText="82,5" Text="{Binding Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+       <TextBox Grid.Column="1" Header="Längd (cm)" PlaceholderText="185" Text="{Binding Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+      </Grid>
+      <ComboBox Header="Klubbfattning" PlaceholderText="Välj fattning" HorizontalAlignment="Stretch" ItemsSource="{Binding Hands}" DisplayMemberPath="Label" SelectedItem="{Binding SelectedHand, Mode=TwoWay}"/>
+      <TextBlock Text="Vänster = vänster hand längst ned på klubban." TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+      <Button Content="Lägg till spelare" Command="{Binding SaveCommand}" HorizontalAlignment="Stretch" Style="{ThemeResource AccentButtonStyle}" Margin="0,8,0,0"/>
+     </StackPanel></UserControl>
+    </Border>
+    <StackPanel Grid.Column="1" Spacing="16">
+     <TextBlock Text="Spelartrupp" Style="{ThemeResource SubtitleTextBlockStyle}"/>
+     <TextBlock Text="{Binding CountLabel}" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+     <Button Content="Uppdatera listan" Command="{Binding LoadCommand}"/>
+     <ProgressBar IsIndeterminate="{Binding IsBusy}" Height="3"/>
+     <TextBlock Text="{Binding EmptyLabel}" TextWrapping="Wrap"/>
+     <ItemsControl ItemsSource="{Binding Players}">
+      <ItemsControl.ItemTemplate><DataTemplate>
+       <Border Padding="18" Margin="0,0,0,10" CornerRadius="8" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+        <Grid ColumnSpacing="16"><Grid.ColumnDefinitions><ColumnDefinition Width="54"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+         <TextBlock Text="{Binding Number}" FontSize="24" FontWeight="SemiBold" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+         <StackPanel Grid.Column="1" Spacing="5">
+          <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+          <TextBlock Text="{Binding Position}"/>
+          <StackPanel Orientation="Horizontal" Spacing="12"><TextBlock Text="{Binding Weight}"/><TextBlock Text="{Binding Height}"/></StackPanel>
+          <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="Fattning:"/><TextBlock Text="{Binding Hand}"/></StackPanel>
+         </StackPanel>
+        </Grid>
+       </Border>
+      </DataTemplate></ItemsControl.ItemTemplate>
+     </ItemsControl>
+    </StackPanel>
+   </Grid>
+  </Grid>
+ </ScrollViewer>
+</Window>
